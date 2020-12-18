@@ -359,7 +359,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
                 best_map = mean_average_precision;
                 printf("New best mAP!\n");
                 char buff[256];
-                sprintf(buff, "%s/%s_best_%d.weights", backup_directory, base, iteration);
+                sprintf(buff, "%s/%s_best_%d-%f.weights", backup_directory, base, iteration, mean_average_precision);
                 save_weights(net, buff);
             }
 
@@ -380,7 +380,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
         draw_train_loss(windows_name, img, img_size, avg_loss, max_img_loss, iteration, net.max_batches, mean_average_precision, draw_precision, "mAP%", avg_contrastive_acc / 100, dont_show, mjpeg_port, avg_time);
 #endif    // OPENCV
 
-        if (iteration % 1000 == 0 || (iteration < 1000 && iteration % 100 == 0)) {
+        if (iteration % 1000 == 0 || (iteration < 1000 && iteration % 200 == 0)) {
         //if (i % 100 == 0) {
 //         if (iteration >= (iter_save + 10000) || iteration % 10000 == 0) {
 //             iter_save = iteration;
@@ -398,7 +398,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
             if (ngpus != 1) sync_nets(nets, ngpus, 0);
 #endif
             char buff[256];
-            sprintf(buff, "%s/%s_last.weights", backup_directory, base);
+            sprintf(buff, "%s/%s_last_%d.weights", backup_directory, base, iteration);
             save_weights(net, buff);
 
             if (net.ema_alpha && is_ema_initialized(net)) {
