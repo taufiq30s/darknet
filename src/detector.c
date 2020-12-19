@@ -380,7 +380,7 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
         draw_train_loss(windows_name, img, img_size, avg_loss, max_img_loss, iteration, net.max_batches, mean_average_precision, draw_precision, "mAP%", avg_contrastive_acc / 100, dont_show, mjpeg_port, avg_time);
 #endif    // OPENCV
 
-        if (iteration % 1000 == 0 || (iteration < 1000 && iteration % 200 == 0)) {
+        if (iteration % 1000 == 0)) {
         //if (i % 100 == 0) {
 //         if (iteration >= (iter_save + 10000) || iteration % 10000 == 0) {
 //             iter_save = iteration;
@@ -388,11 +388,11 @@ void train_detector(char *datacfg, char *cfgfile, char *weightfile, int *gpus, i
             if (ngpus != 1) sync_nets(nets, ngpus, 0);
 #endif
             char buff[256];
-            sprintf(buff, "%s/%s_%d.weights", backup_directory, base, iteration);
+            sprintf(buff, "%s/%s_last_%dweights", backup_directory, base, iteration);
             save_weights(net, buff);
         }
 
-        if (iteration >= (iter_save_last + 100) || (iteration % 100 == 0 && iteration > 1)) {
+        if (iteration >= (iter_save_last + 100) || (iteration % 200 == 0 && iteration > 1)) {
             iter_save_last = iteration;
 #ifdef GPU
             if (ngpus != 1) sync_nets(nets, ngpus, 0);
